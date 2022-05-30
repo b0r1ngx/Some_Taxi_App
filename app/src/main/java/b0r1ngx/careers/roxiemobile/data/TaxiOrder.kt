@@ -1,6 +1,7 @@
 package b0r1ngx.careers.roxiemobile.data
 
 import com.squareup.moshi.JsonClass
+import java.time.LocalDateTime
 
 // Generating MoshiAdapter in compile-time instead of runtime -
 // ускорение Android Decoding Time (2x+ time) и по-итогу общего времени при получение данных
@@ -12,5 +13,15 @@ data class TaxiOrder(
     val endAddress: Address,
     val price: Price,
     val orderTime: String,
+    val vehicle: Vehicle
+)
+
+// todo: change orderTime: String to Date -> utils
+data class RightTaxiOrder(
+    val id: Int,
+    val startAddress: Address,
+    val endAddress: Address,
+    val price: RightPrice,
+    val orderTime: LocalDateTime,
     val vehicle: Vehicle
 )

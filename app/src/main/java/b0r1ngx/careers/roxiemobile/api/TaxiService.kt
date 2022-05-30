@@ -16,8 +16,10 @@ import java.net.URL
 const val BASE_URL = "https://www.roxiemobile.ru"
 const val PHOTO_PATH = "/careers/test/images/"
 
+
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
+//    .add(LocalDateTimeAdapter)
     .build()
 
 //private val httpCacheDirectory = // path to external memory
@@ -58,15 +60,15 @@ private fun provideLoggingInterceptor(): HttpLoggingInterceptor =
         }
     }
 
-object Taxi {
+object TaxiService {
     val retrofitService: TaxiApi by lazy {
         retrofit.create(TaxiApi::class.java)
     }
 
     /*
-     * Allow to download photo from server
+     * Allow to fetch photo from server as Bitmap
      */
-    fun getPhoto(fileName: String): Bitmap =
+    fun getPhotoBitmap(fileName: String): Bitmap =
         BitmapFactory.decodeStream(
             URL(BASE_URL + PHOTO_PATH + fileName)
                 .openStream())

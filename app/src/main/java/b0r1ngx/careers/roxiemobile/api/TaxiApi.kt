@@ -10,5 +10,5 @@ import java.io.InputStream
 
 interface TaxiApi {
     @GET("careers/test/orders.json")
-    suspend fun getOrders(): List<TaxiOrder>
+    suspend fun getOrders(): MutableList<TaxiOrder>
 }
