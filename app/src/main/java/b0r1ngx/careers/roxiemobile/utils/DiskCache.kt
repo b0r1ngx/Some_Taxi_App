@@ -15,7 +15,7 @@ import java.util.*
  */
 class DiskCache {
     fun getBitmap(externalCacheDir: File, fileCacheLifeTime: Int, fileName: String): Bitmap? {
-        Log.d("Test", "downloadImage() START")
+        Log.d("Test", "getBitmap() START")
         var bitmap: Bitmap? = null
 
         if (fileCacheLifeTime != 0) {
@@ -27,10 +27,10 @@ class DiskCache {
                 if (file.exists()) {
                     if (fileLastTimeModified + fileCacheLifeTime < nowTime) {
                         file.delete()
-                        saveBitmapToFile(file, fileName)
+                        downloadBitmapAndSaveToFile(file, fileName)
                     }
                 } else {
-                    saveBitmapToFile(file, fileName)
+                    downloadBitmapAndSaveToFile(file, fileName)
                 }
 
                 bitmap = BitmapFactory.decodeStream(FileInputStream(file))
@@ -48,49 +48,20 @@ class DiskCache {
             }
         }
 
-        Log.d("Test", "downloadImage() END")
+        Log.d("Test", "getBitmap() END")
         return bitmap
     }
 
-    private fun saveBitmapToFile(file: File, fileName: String) {
-        val bitmap = TaxiService.getPhotoBitmap(fileName)
+    private fun downloadBitmapAndSaveToFile(file: File, fileName: String) {
+        Log.d("Test", "downloadBitmapAndSaveToFile() START")
+        val bitmapFromInternet = TaxiService.getPhotoBitmap(fileName)
         try {
             FileOutputStream(file).use {
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
+                bitmapFromInternet.compress(Bitmap.CompressFormat.JPEG, 100, it)
             }
         } catch (e: IOException) {
             e.printStackTrace()
         }
-    }
-
-    private fun md5(s: String): String {
-        try {
-            val digest: MessageDigest = MessageDigest.getInstance("MD5")
-            digest.update(s.toByteArray())
-            val messageDigest: ByteArray = digest.digest()
-            val hexString = StringBuffer()
-            for (i in messageDigest.indices) {
-                hexString.append(Integer.toHexString(0xFF and messageDigest[i].toInt()))
-            }
-            return hexString.toString()
-        } catch (e: Exception) {
-            Log.d("Test", "md5(), ${e.printStackTrace()}")
-        }
-        return ""
-    }
-
-    private fun fileSave(file: File, inputStream: InputStream, outputStream: FileOutputStream) {
-        file.createNewFile()
-
-        var i: Int
-        try {
-            while (inputStream.read().also { i = it } != -1) {
-                outputStream.write(i)
-            }
-            outputStream.flush()
-            outputStream.close()
-        } catch (e: IOException) {
-            Log.d("Test", "fileSave() ${e.printStackTrace()}")
-        }
+        Log.d("Test", "downloadBitmapAndSaveToFile() END")
     }
 }

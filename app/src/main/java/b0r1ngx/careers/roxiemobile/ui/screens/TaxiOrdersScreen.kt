@@ -21,9 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
 // Local files
-import b0r1ngx.careers.roxiemobile.data.TaxiOrder
 import b0r1ngx.careers.roxiemobile.compose.TaxiNavHelper
-import b0r1ngx.careers.roxiemobile.data.RightTaxiOrder
+import b0r1ngx.careers.roxiemobile.data.TaxiOrder
 import b0r1ngx.careers.roxiemobile.utils.DATE_FORMAT
 import b0r1ngx.careers.roxiemobile.viewmodels.TaxiViewModel
 
@@ -58,7 +57,7 @@ fun GetTaxiOrders(taxiViewModel: TaxiViewModel, navController: NavHostController
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun TaxiOrderItem(
-    taxiOrder: RightTaxiOrder,
+    taxiOrder: TaxiOrder,
     taxiViewModel: TaxiViewModel,
     navController: NavHostController
 ) {
@@ -92,7 +91,10 @@ fun TaxiOrderItem(
                     text = "${taxiOrder.startAddress.address} -> ${taxiOrder.endAddress.address}",
                     style = MaterialTheme.typography.bodyMedium
                 )
-                Text(text = DATE_FORMAT.format(taxiOrder.orderTime), style = MaterialTheme.typography.bodySmall)
+                Text(
+                    text = DATE_FORMAT.format(taxiOrder.orderTime),
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
             Spacer(modifier = Modifier.weight(1f))
             Column(horizontalAlignment = Alignment.End) {

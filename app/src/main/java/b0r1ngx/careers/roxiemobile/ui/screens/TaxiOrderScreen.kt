@@ -16,7 +16,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import b0r1ngx.careers.roxiemobile.data.RightTaxiOrder
 import b0r1ngx.careers.roxiemobile.data.TaxiOrder
 import b0r1ngx.careers.roxiemobile.data.Vehicle
 import b0r1ngx.careers.roxiemobile.utils.DATE_FORMAT
@@ -24,7 +23,7 @@ import b0r1ngx.careers.roxiemobile.viewmodels.TaxiViewModel
 
 @Composable
 fun TaxiOrderScreenBody(taxiViewModel: TaxiViewModel, navController: NavHostController) =
-        GetTaxiOrderInfo(taxiViewModel, navController)
+    GetTaxiOrderInfo(taxiViewModel, navController)
 
 @Composable
 fun GetTaxiOrderInfo(taxiViewModel: TaxiViewModel, navController: NavHostController) {
@@ -52,7 +51,7 @@ fun GetTaxiOrderInfo(taxiViewModel: TaxiViewModel, navController: NavHostControl
 }
 
 @Composable
-fun OrderInfoBody(taxiOrder: RightTaxiOrder, vehicle: Vehicle) {
+fun OrderInfoBody(taxiOrder: TaxiOrder, vehicle: Vehicle) {
     val isSameCity = taxiOrder.startAddress.city == taxiOrder.endAddress.city
     val cityText =
         if (isSameCity) taxiOrder.startAddress.city
@@ -70,7 +69,10 @@ fun OrderInfoBody(taxiOrder: RightTaxiOrder, vehicle: Vehicle) {
             text = "${taxiOrder.startAddress.address} -> ${taxiOrder.endAddress.address}",
             style = MaterialTheme.typography.bodyMedium
         )
-        Text(text = DATE_FORMAT.format(taxiOrder.orderTime), style = MaterialTheme.typography.bodySmall)
+        Text(
+            text = DATE_FORMAT.format(taxiOrder.orderTime),
+            style = MaterialTheme.typography.bodySmall
+        )
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(text = "Стоимость поездки")

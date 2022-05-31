@@ -1,8 +1,6 @@
 package b0r1ngx.careers.roxiemobile.viewmodels
 
 // Lib imports
-
-// Local imports
 import android.graphics.Bitmap
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -12,30 +10,31 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.io.File
+
+// Local imports
 import b0r1ngx.careers.roxiemobile.utils.DiskCache
 import b0r1ngx.careers.roxiemobile.FILE_CACHE_TIME
 import b0r1ngx.careers.roxiemobile.api.TaxiService
 import b0r1ngx.careers.roxiemobile.data.*
-import b0r1ngx.careers.roxiemobile.utils.toLocalDateTime
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.io.File
-import java.time.LocalDateTime
 
 /**
  * The Taxi [ViewModel], provides functionality to fetch from api/services data for activities
  */
 class TaxiViewModel : ViewModel() {
-    val diskCache = DiskCache()
+    private val diskCache = DiskCache()
+
     // The internal MutableLiveData that stores the status, List<TaxiOrder>, Bitmap
     // of the most recent request
     private val _status = MutableLiveData<String>()
-    private val _orders = MutableLiveData<List<RightTaxiOrder>>()
+    private val _orders = MutableLiveData<List<TaxiOrder>>()
     private val _photo = MutableLiveData<Bitmap>()
 
     // The external immutable LiveData for the request status, List<TaxiOrder>, Bitmap
     val status: LiveData<String> = _status
-    val orders: LiveData<List<RightTaxiOrder>> = _orders
+    val orders: LiveData<List<TaxiOrder>> = _orders
     val photo: LiveData<Bitmap> = _photo
 
     /* State in a value in or pass to composable, where changes of the value would update the UI.
@@ -43,10 +42,10 @@ class TaxiViewModel : ViewModel() {
      * in order to make the composable stateless and easier to test
      * Using MutableState is the most convenient (we could use LiveData, Flow)
      */
-    var currentTaxiOrder by mutableStateOf<RightTaxiOrder?>(null)
+    var currentTaxiOrder by mutableStateOf<TaxiOrder?>(null)
         private set
 
-    fun newTaxiOrder(taxiOrder: RightTaxiOrder) {
+    fun newTaxiOrder(taxiOrder: TaxiOrder) {
         currentTaxiOrder = taxiOrder
     }
 
@@ -65,8 +64,7 @@ class TaxiViewModel : ViewModel() {
         viewModelScope.launch {
             Log.d("Test", "getTaxiOrders() START")
             try {
-                // todo: order by ascending
-                val orders = postProcessOrders(TaxiService.retrofitService.getOrders())
+                val orders = TaxiService.retrofitService.getOrders()
                 orders.sortByDescending { it.orderTime }
                 _orders.value = orders
                 _status.value = "Successfully fetch ${orders.size} orders"
@@ -75,33 +73,6 @@ class TaxiViewModel : ViewModel() {
                 Log.d("Test", "Error at TaxiViewModel.getTaxiOrders(): ${e.printStackTrace()}")
             }
         }
-
-    private fun postProcessOrders(orders: MutableList<TaxiOrder>): MutableList<RightTaxiOrder> {
-        fun rightPrice(price: Price) =
-            when(price.currency) {
-                "RUB" -> RightPrice(price.amount.toFloat() / 100, Currency.RUB)
-                "EUR" -> RightPrice(price.amount.toFloat() / 100, Currency.EUR)
-                "GBP" -> RightPrice(price.amount.toFloat() / 100, Currency.GBP)
-                "USD" -> RightPrice(price.amount.toFloat() / 100, Currency.USD)
-                else -> RightPrice(price.amount.toFloat() / 100, Currency.RUB)
-            }
-
-
-        val answer = mutableListOf<RightTaxiOrder>()
-        for (order in orders) {
-            answer.add(
-                RightTaxiOrder(
-                    id = order.id,
-                    startAddress = order.startAddress,
-                    endAddress = order.endAddress,
-                    price = rightPrice(order.price),
-                    orderTime = order.orderTime.toLocalDateTime(),
-                    vehicle = order.vehicle
-                )
-            )
-        }
-        return answer
-    }
 
     fun getTaxiPhoto(externalCacheDir: File, fileName: String) =
         viewModelScope.launch(Dispatchers.IO) {

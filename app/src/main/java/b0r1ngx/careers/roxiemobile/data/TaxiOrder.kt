@@ -12,16 +12,6 @@ data class TaxiOrder(
     val startAddress: Address,
     val endAddress: Address,
     val price: Price,
-    val orderTime: String,
-    val vehicle: Vehicle
-)
-
-// todo: change orderTime: String to Date -> utils
-data class RightTaxiOrder(
-    val id: Int,
-    val startAddress: Address,
-    val endAddress: Address,
-    val price: RightPrice,
     val orderTime: LocalDateTime,
     val vehicle: Vehicle
 )
