@@ -39,14 +39,6 @@ import b0r1ngx.careers.roxiemobile.viewmodels.TaxiViewModel
 
 const val FILE_CACHE_TIME = 600
 
-private const val DISK_CACHE_SIZE = 10L * 1024 * 1024
-private const val DISK_CACHE_DIR = "thumbnails"
-
-//private var diskLruCache: DiskLruCache? = null
-//private val diskCacheLock = ReentrantLock()
-//private val diskCacheLockCondition: Condition = diskCacheLock.newCondition()
-//private var diskCacheStarting = true
-
 class MainActivity : ComponentActivity() {
     private val taxiViewModel: TaxiViewModel by viewModels()
 
@@ -63,84 +55,12 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        // Execute other logic, init SDKs, etc...
-        // Initialize disk cache on background thread
-//        val cacheDir = getDiskCacheDir(this, DISK_CACHE_DIR)
-//        initDiskCache(cacheDir)
     }
-
-//    private fun initDiskCache(vararg params: File) =
-//        lifecycleScope.launch(Dispatchers.IO) {
-//            diskCacheLock.withLock {
-//                val cacheDir = params[0]
-//                diskLruCache = diskLruCache.open(cacheDir, DISK_CACHE_SIZE)
-//                diskCacheStarting = false // Finished initialization
-//                diskCacheLockCondition.signalAll() // Wake any waiting threads
-//            }
-//        }
-//
-//    fun addBitmapToCache(key: String, bitmap: Bitmap) {
-//        // Add to memory cache as before
-////        if (getBitmapFromMemCache(key) == null) {
-////            memoryCache.put(key, bitmap)
-////        }
-//
-//        // Also add to disk cache
-//        synchronized(diskCacheLock) {
-//            diskLruCache?.apply {
-//                if (!containsKey(key)) {
-//                    put(key, bitmap)
-//                }
-//            }
-//        }
-//    }
-//
-//    fun getBitmapFromDiskCache(key: String): Bitmap? =
-//        diskCacheLock.withLock {
-//            // Wait while disk cache is started from background thread
-//            while (diskCacheStarting) {
-//                try {
-//                    diskCacheLockCondition.await()
-//                } catch (e: InterruptedException) {
-//                    Log.d("Test", "getBitmapFromDiskCache(), ${e.printStackTrace()}")
-//                    return null
-//                }
-//            }
-//            return diskLruCache?.get(key)
-//        }
-//
-//
-//    // Creates a unique subdirectory of the designated app cache directory. Tries to use external
-//    // but if not mounted, falls back on internal storage.
-//    private fun getDiskCacheDir(context: Context, uniqueName: String): File {
-//        // Check if media is mounted or storage is built-in, if so, try and use external cache dir
-//        // otherwise use internal cache dir
-//        val cachePath =
-//            if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
-//                || !isExternalStorageRemovable()) {
-//                context.externalCacheDir?.path
-//            } else {
-//                context.cacheDir.path
-//            }
-//
-//        return File(cachePath + File.separator + uniqueName)
-//    }
 }
 
 @Composable
 fun TaxiApp(taxiViewModel: TaxiViewModel) {
-    // When using Navigation within Compose, routes are represented as strings.
-    // You can think of these strings as being similar to URLs or deep links.
-    // We'll use the name property of each TaxiNavHelper item as the route,
-    // for example, TaxiNavHelper.Orders.name.
     val navController = rememberNavController()
-
-    //  Use this in some cases (eg. to create and use NavBarMenu)
-//    val allScreens = values().toList()
-//    val backstackEntry = navController.currentBackStackEntryAsState()
-//    val currentScreen = TaxiNavHelper.fromRoute(
-//        backstackEntry.value?.destination?.route
-//    )
     TaxiNavHost(navController, taxiViewModel)
 }
 
@@ -160,12 +80,6 @@ fun TaxiNavHost(
     composable(Order.name) {
         TaxiOrderScreenBody(taxiViewModel, navController)
     }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    TaxiTheme {
 
-    }
 }

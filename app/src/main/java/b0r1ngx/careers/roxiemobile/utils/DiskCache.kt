@@ -9,7 +9,7 @@ import java.security.MessageDigest
 import java.util.*
 
 /*
- *
+ * Self Cache realisation and interaction to saving images,
  * adopted from:
  * Source (c) https://habr.com/ru/post/133239/
  */
