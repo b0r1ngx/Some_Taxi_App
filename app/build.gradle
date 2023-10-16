@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'b0r1ngx.careers.roxiemobile'
-    compileSdk 32
+    compileSdk 34
 
     defaultConfig {
         applicationId "b0r1ngx.careers.roxiemobile"
         minSdk 26
-        targetSdk 32
+        targetSdk 34
 
         versionCode 1
         versionName "1.0"
@@ -56,7 +56,7 @@ android {
     }
     composeOptions {
         // Required for using Compose in project
-        kotlinCompilerExtensionVersion '1.1.1'
+        kotlinCompilerExtensionVersion '1.5.1'
     }
     packagingOptions {
         resources {
@@ -67,23 +67,18 @@ android {
 
 dependencies {
     // Core
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
 
     // Compose
-    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation 'androidx.activity:activity-compose:1.8.0'
     implementation "androidx.navigation:navigation-compose:2.4.2"
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation "com.google.android.material:compose-theme-adapter:1.1.10"
-
-    // For work with ViewModels in Compose
-    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
+    implementation "androidx.compose:compose-bom:2023.08.00"
+    implementation "androidx.compose.ui:ui"
+    implementation "androidx.compose.ui:ui-tooling-preview"
 
     // Material Design
-    implementation "com.google.android.material:material:1.6.0"
-    implementation "androidx.compose.material:material:1.2.0-beta02"
-    implementation 'androidx.compose.material3:material3:1.0.0-alpha12'
+    implementation 'androidx.compose.material3:material3'
 
     // Retrofit & logging
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
